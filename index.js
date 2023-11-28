@@ -20,16 +20,33 @@ app.get("/pesquisar/:cidade", async(req, res) => {
     const resp = await axios.get(url);
 
     const coord = resp.data.city.coord;
-    const cidade = resp.data.city.name;
-    const temp = resp.data.list[0].main.temp;
-    const senT = resp.data.list[0].main.feels_like;
-    const descricao = resp.data.list[0].weather[0].description;
+    // const cidade = resp.data.city.name;
+    // const temp = resp.data.list[0].main.temp;
+    // const senT = resp.data.list[0].main.feels_like;
+    // const descricao = resp.data.list[0].weather[0].description;
+    const dados = {
+        coord
+    };
+    res.json(dados);
+});
+
+
+app.get("/pesquisar/:lat/:lon", async(req, res) => {
+
+    const lat = req.params.lat;
+    const lon = req.params.lon;
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appid}&units=${units}&lang=${lang}&cnt=${cnt}`;
+    const resp = await axios.get(url);
+
+    const senT = resp.data.main.feels_like;
+    const descricao = resp.data.weather[0].description;
+    const cidade = resp.data.name;
+    const latLon = resp.data.coord;
     const dados = {
         cidade,
-        temp,
         senT,
         descricao,
-        coord
+        latLon
     };
     res.json(dados);
 });
